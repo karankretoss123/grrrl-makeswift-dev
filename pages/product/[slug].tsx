@@ -13,7 +13,7 @@ import {
 } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { getProduct, getProducts } from 'lib/bigcommerce'
+import { DEFAULT_PRODUCT, getProduct, getProducts } from 'lib/bigcommerce'
 import { getConfig } from 'lib/config'
 import { ProductPageProps } from 'lib/types'
 import { ProductsContext } from 'lib/products-context'
@@ -55,6 +55,7 @@ export async function getStaticProps(
   if (snapshot == null) return { notFound: true, revalidate: 1 }
 
   const slug = ctx.params?.slug
+  console.log('==========================slug = ', slug)
 
   if (slug == null) throw new Error('"slug" URL parameter must be defined.')
 
@@ -64,7 +65,7 @@ export async function getStaticProps(
     getGlobalProps(),
   ])
 
-  if (product == null) return { notFound: true, revalidate: 1 }
+  // if (product == null) return { notFound: true, revalidate: 1 }
 
   return {
     props: {
@@ -76,7 +77,7 @@ export async function getStaticProps(
       ...globalProps,
       snapshot,
       products,
-      product,
+      // product,
     },
     revalidate: 1,
   }
@@ -85,7 +86,7 @@ export async function getStaticProps(
 export default function Page({ products, product, snapshot }: Props) {
   return (
     <ProductsContext.Provider value={products}>
-      <ProductContext.Provider value={product}>
+      <ProductContext.Provider value={DEFAULT_PRODUCT}>
         <MakeswiftPage snapshot={snapshot} />
       </ProductContext.Provider>
     </ProductsContext.Provider>

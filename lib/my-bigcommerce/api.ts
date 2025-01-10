@@ -34,7 +34,7 @@ export async function getFullCategory(id: number): Promise<FullCategory | null> 
 
 export async function getCategoryProducts(id: number): Promise<ProductFragment[]> {
   const config = getConfig()
-  console.log('=============getCategoryProducts===============')
+  console.log('=============getCategoryProducts===============', id)
   try {
     const response = await fetch(config.bigcommerce.storefrontURL, {
       method: 'POST',
@@ -44,7 +44,7 @@ export async function getCategoryProducts(id: number): Promise<ProductFragment[]
       },
       body: JSON.stringify({
         query: CATEGORY_PRODUCTS_QUERY,
-        variables: { entityId: id },
+        variables: { entityId: id, first: 50 },
       }),
     })
 
@@ -59,8 +59,10 @@ export async function getCategoryProducts(id: number): Promise<ProductFragment[]
 
       throw new Error('There was an error fetching the products.')
     }
+    const finalResult = result.data.site.search.searchProducts.products.edges.map(edge => edge.node)
+    console.log('finalResult.length === ', finalResult[0])
 
-    return result.data.site.search.searchProducts.products.edges.map(edge => edge.node)
+    return finalResult
   } catch (error) {
     console.log('erroro = ', error)
     return [] // Returning an empty array if an error occurs

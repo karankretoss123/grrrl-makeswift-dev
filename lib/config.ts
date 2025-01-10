@@ -41,7 +41,8 @@ export function getConfig(): Config {
           : [],
     },
     makeswift: {
-      siteApiKey: 'bd914aed-6c6e-415e-b8a8-a142fb214cc0',
+      // siteApiKey: 'bd914aed-6c6e-415e-b8a8-a142fb214cc0', untitled
+      siteApiKey: '518c94f9-10b6-4f1b-9c33-27bd7b3106e7', //dapper
       productTemplatePathname: '/__product__',
       categoryTemplatePathname: '/__category__',
     },

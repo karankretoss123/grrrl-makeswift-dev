@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { useProducts } from 'lib/products-context'
 import { ProductFragment } from 'lib/bigcommerce'
+import axios from 'axios'
+import { getConfig } from 'lib/config'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 type Props = {
   className?: string
@@ -10,24 +14,96 @@ type Props = {
 }
 
 export function ProductList({ className, categoryEntityId, count, loadedProducts }: Props) {
+  const config = getConfig()
+  const apiUrl: string = config.bigcommerce.apiUrl
   const defaultProducts = useProducts({ categoryEntityId, count })
-  const products = loadedProducts ?? defaultProducts
-  console.log('=======================products111 === ', products[0])
+  const [products, setProducts] = useState(loadedProducts ?? defaultProducts)
+  const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const [error, setError] = useState(false)
+  console.log('=======================categoryEntityId === ', categoryEntityId)
+  console.log('=======================products.length === ', products.length)
+  // console.log('=======================products111 === ', products[0])
+  const fetchProducts = async (page: number) => {
+    setLoading(true)
+    setError(false)
 
+    try {
+      const response = await axios.get(
+        `${apiUrl}v3/catalog/products/by-category?category=${categoryEntityId}&limit=10&page=${page}`,
+        {
+          headers: {
+            'X-Auth-Token': config.bigcommerce.accessToken,
+          },
+        },
+      )
+      console.log('response.success========', response)
+
+      const fetchedProducts = response.data.data.map((product: any) => ({
+        id: product.id,
+        title: product.name,
+        price: `$${product.price}`,
+        description: product.description,
+        image: product.image || '',
+      }))
+
+      setProducts(fetchedProducts)
+      setTotalPages(response.data.pagination.totalPages)
+    } catch (err) {
+      console.error('Error fetching products:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  useEffect(() => {
+    fetchProducts(currentPage)
+  }, [currentPage])
   return (
-    <div
-      className={`${className} grid grid-cols-[repeat(auto-fit,minmax(325px,max-content))] justify-center gap-5`}
-    >
-      {products.length === 0 && count !== 0 ? (
-        <p className="font-sans text-lg">Looks like that category doesn&apos;t have any products</p>
+    <div className={className}>
+      <h1 className="text-xl font-bold">Product List</h1>
+      <p className="text-lg">Id: {categoryEntityId}</p>
+      {loading ? (
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="loader h-12 w-12 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
+        </div>
       ) : (
-        products.map((product: any) => (
-          <div key={product.id} className="rounded-md border p-4 shadow-md">
-            <img src={product?.defaultImage?.urlOriginal}></img>
-            <h2 className="text-lg font-semibold">{product.name}</h2>
-            <p className="mt-2 font-bold text-green-500">Price: ${product.price}</p>
+        <>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
+            {products.map((product: any) => (
+              <div key={product.id} className="rounded-md border p-4 shadow-md">
+                <img src={product.image}></img>
+                <h2 className="text-lg font-semibold">{product.name}</h2>
+                <p className="mt-2 font-bold text-green-500">Price: ${product.price}</p>
+              </div>
+            ))}
           </div>
-        ))
+          <div className="mt-8 flex justify-center space-x-4">
+            {currentPage > 1 && (
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="rounded border bg-blue-500 px-4 py-2 text-white"
+              >
+                Previous
+              </button>
+            )}
+
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+
+            {currentPage < totalPages && (
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="rounded border bg-blue-500 px-4 py-2 text-white"
+              >
+                Next
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   )

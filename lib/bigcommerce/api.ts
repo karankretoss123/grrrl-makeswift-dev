@@ -29,7 +29,7 @@ export async function getProducts(): Promise<ProductFragment[]> {
     if (!response.ok) throw new Error(response.statusText)
 
     const result: GraphQLResponse<ProductQuery> = await response.json()
-    console.log('result=============', result)
+    // console.log('result=============', result)
 
     if (result.errors != null) {
       result.errors.forEach(error => {
@@ -72,6 +72,8 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getProduct(id: number): Promise<ProductFragment | null> {
+  console.log('============getProduct id= ', id)
+
   const config = getConfig()
   const response = await fetch(config.bigcommerce.storefrontURL, {
     method: 'POST',
@@ -84,6 +86,7 @@ export async function getProduct(id: number): Promise<ProductFragment | null> {
       variables: { entityId: id },
     }),
   })
+  console.log('response.ok = ', response.ok)
 
   if (!response.ok) throw new Error(response.statusText)
 
@@ -98,6 +101,7 @@ export async function getProduct(id: number): Promise<ProductFragment | null> {
   }
 
   const [productEdge] = result.data.site.products.edges
+  console.log('result.data = ', result.data)
 
   return productEdge?.node
 }

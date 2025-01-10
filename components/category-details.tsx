@@ -1,6 +1,7 @@
-import { useCategory } from "lib/category-context"
-import { useCategoryProducts } from "lib/category-products-context"
-import { ProductList } from "./product-list"
+import { useCategory } from 'lib/category-context'
+import { useCategoryProducts } from 'lib/category-products-context'
+import { ProductList } from './product-list'
+import { usePathname } from 'next/navigation'
 
 type CategoryNameProps = {
   className?: string
@@ -34,7 +35,17 @@ type CategoryProductListProps = {
 }
 
 export function CategoryProductList({ className }: CategoryProductListProps) {
+  const pathname = usePathname()
+  const categorySlug = pathname?.split('/').pop() // Extract the last part of the path
+  console.log('================categorySlug === ', categorySlug)
+
   const loadedProducts = useCategoryProducts()
 
-  return <ProductList className={className} loadedProducts={loadedProducts} />
+  return (
+    <ProductList
+      className={className}
+      loadedProducts={loadedProducts}
+      categoryEntityId={categorySlug}
+    />
+  )
 }
