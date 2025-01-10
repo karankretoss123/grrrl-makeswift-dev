@@ -3,8 +3,10 @@ import { ReactNode, Ref, forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
 import clsx from 'clsx'
 import { getConfig } from 'lib/config'
+import Link from 'next/link'
 
 type ProductItem = {
+  id: ReactNode
   title: ReactNode
   price: ReactNode
   description: ReactNode
@@ -37,6 +39,7 @@ export const Limitededition = forwardRef(function Tabs(
       )
       const fetchedProducts = response.data.data
         .map((product: any) => ({
+          id: product.id,
           title: product.name,
           price: `$${product.price}`,
           description: product.description,
@@ -69,7 +72,11 @@ export const Limitededition = forwardRef(function Tabs(
           {/* Section 1: 2 products in the same column */}
           <div className="flex flex-col gap-6">
             {products.slice(0, 2).map((product, i) => (
-              <div key={i} className="rounded-xl text-white shadow-lg">
+              <Link
+                href={`/product/${product.id}`}
+                key={i}
+                className="relative rounded-xl text-white"
+              >
                 <img
                   src={product.image}
                   alt={product.title as string}
@@ -77,13 +84,13 @@ export const Limitededition = forwardRef(function Tabs(
                 />
                 <h3 className="mt-4 text-lg">{product.title}</h3>
                 <div className="mt-2">{product.price}</div>
-              </div>
+              </Link>
             ))}
           </div>
 
           {/* Section 2: 1 product */}
           {products.length > 2 && (
-            <div className="rounded-xl text-white shadow-lg">
+            <Link href={`/product/${products[2].id}`} className="rounded-xl text-white">
               <img
                 src={products[2].image}
                 alt={products[2].title as string}
@@ -91,7 +98,7 @@ export const Limitededition = forwardRef(function Tabs(
               />
               <h3 className="mt-4 text-lg">{products[2].title}</h3>
               <div className="mt-2">{products[2].price}</div>
-            </div>
+            </Link>
           )}
 
           {/* Section 3: Static image and button */}

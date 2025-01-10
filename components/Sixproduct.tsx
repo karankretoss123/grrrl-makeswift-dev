@@ -3,8 +3,10 @@ import { ReactNode, Ref, forwardRef, useEffect, useState } from 'react'
 import axios from 'axios'
 import clsx from 'clsx'
 import { getConfig } from 'lib/config'
+import Link from 'next/link'
 
 type ProductItem = {
+  id: ReactNode
   title: ReactNode
   price: ReactNode
   description: ReactNode
@@ -37,6 +39,7 @@ export const Sixproduct = forwardRef(function Tabs(
       )
       const fetchedProducts = response.data.data
         .map((product: any) => ({
+          id: product.id,
           title: product.name,
           price: `$${product.price}`,
           description: product.description,
@@ -78,7 +81,8 @@ export const Sixproduct = forwardRef(function Tabs(
           </div>
         ) : (
           products.map((product, i) => (
-            <div key={i} className="rounded-xl">
+            // <div key={i} className="rounded-xl">
+            <Link href={`/product/${product.id}`} key={i} className="rounded-xl">
               <img
                 src={product.image}
                 alt={product.title as string}
@@ -86,7 +90,8 @@ export const Sixproduct = forwardRef(function Tabs(
               />
               <h3 className="mt-4 text-lg">{product.title}</h3>
               <div className="mt-2 text-sm font-light">{product.price}</div>
-            </div>
+            </Link>
+            // </div>
           ))
         )}
       </div>

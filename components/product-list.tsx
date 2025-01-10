@@ -75,11 +75,15 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
         <>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
             {products.map((product: any) => (
-              <div key={product.id} className="rounded-md border p-4 shadow-md">
+              <Link
+                href={`/product/${product.id}`}
+                key={product.id}
+                className="rounded-md border p-4 shadow-md"
+              >
                 <img src={product.image}></img>
                 <h2 className="text-lg font-semibold">{product.name}</h2>
                 <p className="mt-2 font-bold text-green-500">Price: ${product.price}</p>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="mt-8 flex justify-center space-x-4">
