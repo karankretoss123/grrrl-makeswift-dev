@@ -244,7 +244,7 @@ export function ProductAddToCartButton({ className }: ProductAddToCartButtonProp
   const { t } = usePreviewableTranslation('cart')
 
   return (
-    <div className={`${className} space-x-5 flex`}>
+    <div className={`${className} space-x-5 flex text-white`}>
       <div className="flex justify-center items-center space-x-3">
         <button
           aria-label="Decrease quantity"
@@ -268,11 +268,13 @@ export function ProductAddToCartButton({ className }: ProductAddToCartButtonProp
             image_url: product.images.edges?.[0].node.urlOriginal,
             name: product.name,
           })
+          console.log("Yeeeeeeeeeessssssssssssssss");
+          
           setQuantity(1)
-          setAddToCartState('confirming')
-          setTimeout(() => setAddToCartState('initial'), 2000)
+          // setAddToCartState('confirming')
+          // setTimeout(() => setAddToCartState('initial'), 2000)
         }}
-        className={`min-w-[170px] h-16 text-xl text-white bg-green px-8 relative z-0`}
+        className={`min-w-[170px] h-16 text-xl text-black font-bold bg-[#DBF067] hover:bg-[#DBF067]/80 px-8 relative z-0 rounded`}
       >
         <Transition
           className={'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'}

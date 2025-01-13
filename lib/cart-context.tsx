@@ -188,6 +188,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       loading,
       cart: applyOfflineOperationsToCart(cart, offlineOperations),
       addItem: async (lineItem: LineItemRequest) => {
+        console.log('cart=================', cart)
+        console.log('lineItem=================', lineItem)
+        console.log('isOnline=================', isOnline)
+
         if (!isOnline) {
           setOfflineOperations(prev => {
             const nextOfflineOperations: CartOperation[] = [...prev, { type: 'ADD', lineItem }]
@@ -199,6 +203,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
           })
         } else {
           const nextCart = await addLineItem(cart, lineItem)
+          console.log('nextCart-------------', nextCart)
+
           setCart(nextCart)
           localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
         }

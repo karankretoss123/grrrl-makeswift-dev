@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { getConfig } from 'lib/config'
 import { usePathname } from 'next/navigation'
 import parse from 'html-react-parser'
+import { ProductAddToCartButton } from './cart'
 
 type ProductDetails = {
   id: number
@@ -58,16 +59,20 @@ export const ProductData = forwardRef(function Tabs(
   }, [productId])
 
   if (isLoading) {
-    return <div className="p-6 text-center text-lg text-gray-600">Loading product...</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center w-full">
+        <div className="loader h-12 w-12 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
+      </div>
+    )
   }
 
   if (!product) {
-    return <div className="p-6 text-center text-lg text-gray-600">No product data found.</div>
+    return <div className="flex min-h-screen items-center justify-center w-full">No product data found.</div>
   }
 
   return (
     <div ref={ref} className={clsx(className, 'p-5')}>
-      <div className="rounded-xl shadow-lg p-6 bg-white">
+      <div className="rounded-xl shadow-lg p-6">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left Column: Images */}
           <div className="flex flex-col w-full md:w-1/2">
@@ -87,7 +92,7 @@ export const ProductData = forwardRef(function Tabs(
                   key={index}
                   onClick={() => setSelectedImage(image)}
                   className={clsx(
-                    'cursor-pointer rounded-lg border-2',
+                    'w-max cursor-pointer rounded-lg border-2',
                     selectedImage === image ? 'border-blue-500' : 'border-transparent',
                   )}
                 >
@@ -103,11 +108,12 @@ export const ProductData = forwardRef(function Tabs(
 
           {/* Right Column: Product Details */}
           <div className="flex flex-col w-full md:w-1/2">
-            <h2 className="text-2xl font-bold">{product.name}</h2>
+            <h2 className="text-2xl font-bold text-white">{product.name}</h2>
             <p className="text-lg text-gray-500 mt-2">{product.price}</p>
             {product.description && (
-              <p className="text-gray-700 mt-4">{parse(product.description)}</p>
+              <p className="text-gray-700 my-4">{parse(product.description)}</p>
             )}
+            <ProductAddToCartButton />
           </div>
         </div>
       </div>

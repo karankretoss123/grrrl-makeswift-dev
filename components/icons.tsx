@@ -70,8 +70,8 @@ export function Spinner28({ className }: ComponentPropsWithoutRef<'svg'>) {
 export function Minus28() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="13" width="2" height="12" transform="rotate(90 20 13)" fill="#335510" />
-      <rect x="1" y="1" width="26" height="26" rx="13" stroke="#335510" strokeWidth="2" />
+      <rect x="20" y="13" width="2" height="12" transform="rotate(90 20 13)" fill="#DBF067" />
+      <rect x="1" y="1" width="26" height="26" rx="13" stroke="#DBF067" strokeWidth="2" />
     </svg>
   )
 }
@@ -79,8 +79,8 @@ export function Minus28() {
 export function Minus36() {
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="24" y="17" width="2" height="12" transform="rotate(90 24 17)" fill="#335510" />
-      <rect x="1" y="1" width="34" height="34" rx="17" stroke="#335510" strokeWidth="2" />
+      <rect x="24" y="17" width="2" height="12" transform="rotate(90 24 17)" fill="#DBF067" />
+      <rect x="1" y="1" width="34" height="34" rx="17" stroke="#DBF067" strokeWidth="2" />
     </svg>
   )
 }
@@ -88,9 +88,9 @@ export function Minus36() {
 export function Plus28() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="13" y="8" width="2" height="12" fill="#335510" />
-      <rect x="20" y="13" width="2" height="12" transform="rotate(90 20 13)" fill="#335510" />
-      <rect x="1" y="1" width="26" height="26" rx="13" stroke="#335510" strokeWidth="2" />
+      <rect x="13" y="8" width="2" height="12" fill="#DBF067" />
+      <rect x="20" y="13" width="2" height="12" transform="rotate(90 20 13)" fill="#DBF067" />
+      <rect x="1" y="1" width="26" height="26" rx="13" stroke="#DBF067" strokeWidth="2" />
     </svg>
   )
 }
@@ -98,9 +98,9 @@ export function Plus28() {
 export function Plus36() {
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="17" y="12" width="2" height="12" fill="#335510" />
-      <rect x="24" y="17" width="2" height="12" transform="rotate(90 24 17)" fill="#335510" />
-      <rect x="1" y="1" width="34" height="34" rx="17" stroke="#335510" strokeWidth="2" />
+      <rect x="17" y="12" width="2" height="12" fill="#DBF067" />
+      <rect x="24" y="17" width="2" height="12" transform="rotate(90 24 17)" fill="#DBF067" />
+      <rect x="1" y="1" width="34" height="34" rx="17" stroke="#DBF067" strokeWidth="2" />
     </svg>
   )
 }

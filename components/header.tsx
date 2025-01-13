@@ -45,11 +45,11 @@ export function Header({ className, links, localeSwitcherDisabled, cartDisabled 
             />
           </svg>
         </Link>
-        {topCategories.map(category => (
+        {/* {topCategories.map(category => (
           <Link href={`/category/${category.entityId}`} key={category.entityId}>
             {category.name}
           </Link>
-        ))}
+        ))} */}
         {links.map((link, i) => (
           <Link
             href={link.link?.href ?? '#'}
@@ -88,7 +88,7 @@ export function Header({ className, links, localeSwitcherDisabled, cartDisabled 
       )}
 
       <div className="justify-self-end flex items-center space-x-5 col-start-3">
-        <LocaleSwitcher disabled={localeSwitcherDisabled} />
+        {/* <LocaleSwitcher disabled={localeSwitcherDisabled} /> */}
         <Cart disabled={cartDisabled} />
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { getConfig } from '../config'
+import { DEFAULT_CART } from './default-values'
 import { CATEGORY_QUERY, PRODUCTS_QUERY, PRODUCT_QUERY } from './graphql'
 import {
   CartResponse,
@@ -116,6 +117,8 @@ export async function attemptGetCart(cartId: string): Promise<CartResponse | nul
   }
 }
 export async function createCart(): Promise<CartResponse> {
+  console.log('------createCart-----------')
+
   const response = await fetch(`/api/cart`, {
     method: 'POST',
     body: JSON.stringify(null),
@@ -128,14 +131,23 @@ export async function addLineItem(
   cart: CartResponse | null,
   lineItem: LineItemRequest,
 ): Promise<CartResponse> {
-  const response = await fetch(`/api/cart${cart ? `?cartId=${cart.id}` : ''}`, {
-    method: 'POST',
-    body: JSON.stringify({
-      line_item: lineItem,
-    }),
-  })
-  const result: RestResponse<CartResponse> = await response.json()
-  return result.data
+  console.log('=========addLineItem==============')
+  try {
+    // const response = await fetch(`/api/cart${cart ? `?cartId=${cart.id}` : ''}`, {
+    const response = await fetch('http://localhost:3023/v3/carts', {
+      method: 'POST',
+      headers: {
+        'X-Auth-Token': 'ke0dwftal3vhqe3cr8z3u7mvobe3w2k',
+      },
+      body: JSON.stringify({
+        line_item: lineItem,
+      }),
+    })
+    const result: RestResponse<CartResponse> = await response.json()
+    return result.data
+  } catch (error) {
+    return DEFAULT_CART
+  }
 }
 
 export async function updateLineItem(

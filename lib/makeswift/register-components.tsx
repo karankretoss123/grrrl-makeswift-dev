@@ -106,23 +106,23 @@ ReactRuntime.registerComponent(ProductDescription, {
   },
 })
 
-// ReactRuntime.registerComponent(Header, {
-//   type: 'header',
-//   label: 'Header',
-//   props: {
-//     className: Style({ properties: Style.All }),
-//     links: List({
-//       type: Shape({
-//         type: {
-//           link: Link(),
-//           text: TextInput({ label: 'Text' }),
-//         },
-//       }),
-//       label: 'Links',
-//       getItemLabel: item => item?.text ?? '',
-//     }),
-//   },
-// })
+ReactRuntime.registerComponent(Header as any, {
+  type: 'header',
+  label: 'Custom/Header',
+  props: {
+    className: Style({ properties: Style.All }),
+    links: List({
+      type: Shape({
+        type: {
+          link: Link(),
+          text: TextInput({ label: 'Text' }),
+        },
+      }),
+      label: 'Links',
+      getItemLabel: item => item?.text ?? '',
+    }),
+  },
+})
 
 ReactRuntime.registerComponent(ProductAddToCartButton, {
   type: 'add-to-cart-button',
