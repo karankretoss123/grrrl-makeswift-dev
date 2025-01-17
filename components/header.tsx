@@ -40,7 +40,7 @@ export function Header({ className, links, localeSwitcherDisabled, cartDisabled 
       <div className="flex justify-between items-center h-12 my-16 px-8">
         <CiSearch fill="white" className="text-2xl hover:cursor-pointer stroke-1 text-white" />
         <div className="flex-grow flex justify-center ml-16">
-          <Link href="/">
+          <Link href="/page">
             <img src="/images/GRRRL_Logos.png" alt="GRRRL Logos" className="object-contain " />
           </Link>
         </div>
