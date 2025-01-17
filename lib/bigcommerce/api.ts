@@ -183,7 +183,7 @@ export async function deleteLineItem(
     const response = await axios.delete(
       `${apiUrl}v3/carts?cartId=${cart.id}&lineItemId=${relatedLineItem.id}`,
     )
-    return response.data.data as CartResponse
+    return (response.data?.data as CartResponse) ?? null
   } catch (error) {
     console.log('error addLineItem======= ', error)
 

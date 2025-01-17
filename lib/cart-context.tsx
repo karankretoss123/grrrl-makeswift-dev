@@ -257,13 +257,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
           })
         } else if (cart) {
           const nextCart = await deleteLineItem(cart, productId)
-          if (nextCart) {
-            setCart(nextCart)
-            toast.success('Cart Updated!')
-            localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
-          } else {
-            toast.error('Try again!')
-          }
+          // if (nextCart) {
+          setCart(nextCart)
+          toast.success('Cart Updated!')
+          localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          // } else {
+          //   toast.error('Try again!')
+          // }
         }
       },
       getCheckoutURL: async () => {
