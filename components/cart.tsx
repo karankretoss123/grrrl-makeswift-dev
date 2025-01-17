@@ -32,7 +32,7 @@ function CartLineItem({ lineItem }: CartLineItemProps) {
   return (
     <Link
       href={`/product/${lineItem.product_id}`}
-      className={`flex w-full space-x-4 items-end`}
+      className={`flex w-full space-x-4 items-end text-black`}
       key={lineItem.id}
     >
       <img

@@ -139,15 +139,15 @@ export const ProductData = forwardRef(function Tabs(
           {/* Right Column: Product Details */}
           <div className="flex flex-col w-full md:w-1/2">
             <h2 className="text-2xl font-bold text-white">{product.name}</h2>
-            <p className="text-lg text-gray-500 mt-2">{product.price}</p>
+            <p className="text-lg text-white/80 mt-2">{product.price}</p>
             {product.description && (
-              <p className="text-gray-700 my-4">{parse(product.description)}</p>
+              <p className="text-white/80 my-4">{parse(product.description)}</p>
             )}
 
             {/* Variants */}
             {hasOptions && (
               <div className="my-4">
-                <label className="block text-gray-600 font-medium mb-2">Select Variant:</label>
+                <label className="block text-white/80 font-medium mb-2">Select Variant:</label>
                 <select
                   value={selectedVariant?.id || ''}
                   onChange={e =>
@@ -156,7 +156,7 @@ export const ProductData = forwardRef(function Tabs(
                         null,
                     )
                   }
-                  className="w-full border-gray-300 rounded-md shadow-sm"
+                  className="w-full border-gray-300 rounded-md shadow-sm p-2"
                 >
                   {product?.variants?.map(variant => (
                     <option key={variant.id} value={variant.id}>

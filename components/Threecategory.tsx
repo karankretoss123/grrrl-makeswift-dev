@@ -64,7 +64,7 @@ export const Threecategory = forwardRef(function Tabs(
             <Link
               href={`/category/${product.id}`}
               key={i}
-              className="relative rounded-xl text-white shadow-lg"
+              className="relative rounded-xl text-white"
             >
               <img
                 src={product.image_url}

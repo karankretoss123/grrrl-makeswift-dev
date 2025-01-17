@@ -5,6 +5,8 @@ import axios from 'axios'
 import { getConfig } from 'lib/config'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { MdNavigateNext } from 'react-icons/md'
+import { GrFormPrevious } from 'react-icons/gr'
 
 type Props = {
   className?: string
@@ -38,7 +40,6 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
           },
         },
       )
-      console.log('response.success========', response)
 
       const fetchedProducts = response.data.data.map((product: any) => ({
         id: product.id,
@@ -64,46 +65,44 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
     fetchProducts(currentPage)
   }, [currentPage])
   return (
-    <div className={className + ' bg-[#0E0D1F] text-white w-full'}>
+    <div className={className + ' bg-[#0E0D1F] text-white w-ful'}>
       {/* <h1 className="text-xl font-bold">Product List</h1>
       <p className="text-lg">Id: {categoryEntityId}</p> */}
       {loading ? (
         <div className="flex min-h-screen items-center justify-center w-full">
           <div className="loader h-12 w-12 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
         </div>
+      ) : products.length === 0 ? (
+        <div className="p-6 text-center text-lg text-gray-600 min-h-screen">
+          No products available for this category.
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-5 ">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
             {products.map((product: any) => (
-              <Link
-                href={`/product/${product.id}`}
-                key={product.id}
-                className="rounded-md p-4"
-              >
-                <img src={product.image}></img>
-                <h2 className="text-lg font-semibold">{product.name}</h2>
+              <Link href={`/product/${product.id}`} key={product.id} className="rounded-xl p-4">
+                <img
+                  src={product.image}
+                  alt={product.title as string}
+                  className="h-[18rem] w-full rounded-[25px] object-cover md:h-[28rem]"
+                ></img>
+                <h2 className="text-lg font-semibold">{product.title}</h2>
                 <p className="mt-2 font-bold text-green-500">{product.price}</p>
               </Link>
             ))}
           </div>
-          <div className="mt-8 flex justify-center space-x-4">
+          <div className="my-8 flex justify-center space-x-4">
             {currentPage > 1 && (
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                className="rounded border bg-blue-500 px-4 py-2 text-white"
-              >
-                Previous
+              <button onClick={() => handlePageChange(currentPage - 1)} className="">
+                <GrFormPrevious className="text-2xl" />
               </button>
             )}
 
             <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
 
             {currentPage < totalPages && (
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                className="rounded border bg-blue-500 px-4 py-2 text-white"
-              >
-                Next
+              <button onClick={() => handlePageChange(currentPage + 1)} className="">
+                <MdNavigateNext className="text-2xl" />
               </button>
             )}
           </div>

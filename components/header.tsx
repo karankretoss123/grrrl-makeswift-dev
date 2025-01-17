@@ -4,7 +4,7 @@ import { MouseEvent } from 'react'
 
 import { Cart } from './cart'
 import { LocaleSwitcher } from './locale/locale-switcher'
-
+import { CiHeart, CiSearch, CiUser } from 'react-icons/ci'
 import { useTopCategories } from 'lib/top-categories-context'
 
 type LinkValue = {
@@ -26,46 +26,56 @@ type Props = {
 export function Header({ className, links, localeSwitcherDisabled, cartDisabled }: Props) {
   const isOnline = useIsOnline()
 
-  // const topCategories = useTopCategories()
+  const staticCategories = [
+    { id: 47, name: 'Home', link: '/page' },
+    { id: 49, name: 'Vag Up', link: '/category/49' },
+    { id: 39, name: 'New Gear', link: '/category/39' },
+    { id: 47, name: 'Sweatpants', link: '/category/47' },
+    { id: 43, name: 'Shorts', link: '/category/43' },
+  ]
 
   return (
-    <div className={`${className} h-12 grid  grid-cols-3 `}>
-      <div className="flex space-x-5 items-center">
-        <Link href={'/'}>
-          <svg
-            width="28"
-            height="40"
-            viewBox="0 0 28 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M14.9655 0.991297L14 0L13.0345 0.991297C12.5079 1.50844 0.000174124 14.2671 0.000174124 21.6808C-0.0172755 25.1349 1.27735 28.4714 3.63084 31.0381C5.98434 33.6048 9.22778 35.217 12.7271 35.5604V40H15.3605L15.3601 35.5604C18.8439 35.1972 22.0659 33.576 24.4016 31.0113C26.737 28.447 28.0194 25.1215 27.9998 21.681C27.9998 14.2242 15.4921 1.50869 14.9655 0.991451L14.9655 0.991297ZM15.4045 5.25859C16.37 6.3792 17.5109 7.62934 18.6081 9.00849L15.4045 12.1549V5.25859ZM12.7711 12.1982L9.47963 8.96546C10.6206 7.54306 11.7618 6.24989 12.7711 5.12928V12.1982ZM12.7711 15.8621V24.0086L4.60823 15.9914C5.58321 14.2735 6.66784 12.6177 7.85591 11.0344L12.7711 15.8621ZM15.4045 15.8191L20.188 11.0774C21.3767 12.6604 22.4613 14.3161 23.4355 16.0344L15.3603 23.9654L15.4045 15.8191ZM2.67738 21.6812L2.67707 21.6809C2.72452 20.5817 2.97738 19.5005 3.4231 18.4912L12.727 27.6721V32.9307C9.93422 32.5934 7.36458 31.2617 5.50458 29.1887C3.64426 27.1153 2.62272 24.4442 2.63307 21.6808L2.67738 21.6812ZM15.3606 32.9311V27.6295L24.6206 18.5347C25.0633 19.5299 25.3162 20.5964 25.3667 21.6812C25.3798 24.4313 24.3702 27.0919 22.5279 29.1632C20.6856 31.2345 18.1371 32.5742 15.3605 32.9311H15.3606Z"
-              fill="#335510"
-            />
-          </svg>
-        </Link>
-        {/* {topCategories.map(category => (
-          <Link href={`/category/${category.entityId}`} key={category.entityId}>
-            {category.name}
+    <div className={`${className}  py-4 bg-[#0E0D1F]`}>
+      {/* Row 1: Logo Centered, Icons Right */}
+      <div className="flex justify-between items-center h-12 my-16 px-8">
+        <CiSearch fill="white" className="text-2xl hover:cursor-pointer stroke-1 text-white" />
+        <div className="flex-grow flex justify-center ml-16">
+          <Link href="/">
+            <img src="/images/GRRRL_Logos.png" alt="GRRRL Logos" className="object-contain " />
           </Link>
-        ))} */}
-        {links.map((link, i) => (
-          <Link
-            href={link.link?.href ?? '#'}
-            target={link.link?.target}
-            onClick={link.link?.onClick}
-            key={i}
-          >
-            {link.text}
-          </Link>
-        ))}
+        </div>
+        <div className="flex items-center space-x-5 text-white">
+          <CiHeart fill="white" className="text-2xl hover:cursor-pointer stroke-1" />
+          <CiUser fill="white" className="text-2xl hover:cursor-pointer stroke-1" />
+          <Cart disabled={cartDisabled} />
+        </div>
       </div>
-      {isOnline ? (
-        <div />
-      ) : (
-        <div className="fixed z-10 bottom-3 inset-x-7 md:col-start-2 md:absolute md:flex md:bottom-auto md:inset-x-1/3 ">
-          <div className="flex max-w-[318px] mx-auto justify-self-center space-x-3 items-center justify-center text-white bg-green px-6  lg:px-14 pt-[9px] pb-[11px]">
+
+      {/* Row 2: Static Categories Centered */}
+      <div className="flex justify-center my-4 text-white">
+        <div className="flex space-x-8">
+          {staticCategories.map(category => (
+            <Link href={category.link} key={category.id} className="hover:text-gray-400">
+              {category.name}
+            </Link>
+          ))}
+          {links.map((link, i) => (
+            <Link
+              href={link.link?.href ?? '#'}
+              target={link.link?.target}
+              onClick={link.link?.onClick}
+              key={i}
+            >
+              {link.text}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Offline Banner */}
+      {!isOnline && (
+        <div className="fixed z-10 bottom-3 inset-x-7 md:col-start-2 md:absolute md:flex md:bottom-auto md:inset-x-1/3">
+          <div className="flex max-w-[318px] mx-auto justify-self-center space-x-3 items-center justify-center text-white bg-green px-6 lg:px-14 pt-[9px] pb-[11px]">
             <svg
               width="22"
               height="20"
@@ -86,11 +96,6 @@ export function Header({ className, links, localeSwitcherDisabled, cartDisabled 
           </div>
         </div>
       )}
-
-      <div className="justify-self-end flex items-center space-x-5 col-start-3">
-        {/* <LocaleSwitcher disabled={localeSwitcherDisabled} /> */}
-        <Cart disabled={cartDisabled} />
-      </div>
     </div>
   )
 }

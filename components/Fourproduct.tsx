@@ -72,7 +72,7 @@ export const Fourproduct = forwardRef(function Tabs(
             <Link
               href={`/product/${product.id}`}
               key={i}
-              className="relative rounded-xl text-white shadow-lg"
+              className="relative rounded-xl text-white"
             >
               <img
                 src={product.image}
