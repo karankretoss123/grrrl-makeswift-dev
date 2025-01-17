@@ -65,7 +65,7 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
     fetchProducts(currentPage)
   }, [currentPage])
   return (
-    <div className={className + ' bg-[#0E0D1F] text-white w-ful'}>
+    <div className={className + ' bg-[#0E0D1F] text-white w-full 2xl:px-[22rem] px-[2rem]'}>
       {/* <h1 className="text-xl font-bold">Product List</h1>
       <p className="text-lg">Id: {categoryEntityId}</p> */}
       {loading ? (
@@ -78,7 +78,7 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
             {products.map((product: any) => (
               <Link href={`/product/${product.id}`} key={product.id} className="rounded-xl p-4">
                 <img
