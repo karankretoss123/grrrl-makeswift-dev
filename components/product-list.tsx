@@ -65,7 +65,7 @@ export function ProductList({ className, categoryEntityId, count, loadedProducts
     fetchProducts(currentPage)
   }, [currentPage])
   return (
-    <div className={className + ' bg-[#0E0D1F] text-white w-full 2xl:px-[22rem] px-[2rem]'}>
+    <div className={className + ' bg-[#0E0D1F] text-white w-full custom-padding'}>
       {/* <h1 className="text-xl font-bold">Product List</h1>
       <p className="text-lg">Id: {categoryEntityId}</p> */}
       {loading ? (

@@ -101,7 +101,7 @@ export const ProductData = forwardRef(function Tabs(
   }
 
   return (
-    <div ref={ref} className={clsx(className, 'p-5 bg-[#0E0D1F] 2xl:px-[22rem] px-[2rem]')}>
+    <div ref={ref} className={clsx(className, 'p-5 bg-[#0E0D1F] custom-padding')}>
       <div className="rounded-xl shadow-lg p-6">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left Column: Images */}
