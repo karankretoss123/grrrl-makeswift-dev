@@ -35,7 +35,7 @@ export function Header({ className, links, localeSwitcherDisabled, cartDisabled 
   ]
 
   return (
-    <div className={`${className}  py-4 bg-[#0E0D1F]`}>
+    <div className={`${className}  py-4 bg-[#0E0D1F] w-full`}>
       {/* Row 1: Logo Centered, Icons Right */}
       <div className="flex justify-between items-center h-12 my-16 px-8">
         <CiSearch fill="white" className="text-2xl hover:cursor-pointer stroke-1 text-white" />
