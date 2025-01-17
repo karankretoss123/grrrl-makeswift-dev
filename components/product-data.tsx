@@ -12,6 +12,21 @@ type ProductDetails = {
   price: string
   description: string
   images: string[]
+  variants?: Variant[]
+}
+
+type Variant = {
+  id: number
+  sku: string
+  price: number
+  option_values: OptionValue[]
+}
+
+type OptionValue = {
+  id: number
+  label: string
+  option_id: number
+  option_display_name: string
 }
 
 type Props = {
@@ -29,6 +44,9 @@ export const ProductData = forwardRef(function Tabs(
   const [product, setProduct] = useState<ProductDetails | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null)
+  const hasVariants = product?.variants && product.variants.length > 0
+  const hasOptions = hasVariants && product?.variants?.some(v => v.option_values.length > 0)
 
   const fetchProductDetails = async (productId: string) => {
     setIsLoading(true)
@@ -39,14 +57,22 @@ export const ProductData = forwardRef(function Tabs(
         },
       })
       const fetchedProduct = response.data.data
+
       setProduct({
         id: fetchedProduct.id,
         name: fetchedProduct.name,
         price: `$${fetchedProduct.price}`,
         description: fetchedProduct.description,
         images: fetchedProduct.images || [],
+        variants: fetchedProduct.variants || [],
       })
+
       setSelectedImage(fetchedProduct.images?.[0] || null) // Set the first image as default
+
+      // Auto-select the first variant if available
+      if (fetchedProduct.variants?.length > 0) {
+        setSelectedVariant(fetchedProduct.variants[0])
+      }
     } catch (error) {
       console.error('Error fetching product details:', error)
     } finally {
@@ -67,7 +93,11 @@ export const ProductData = forwardRef(function Tabs(
   }
 
   if (!product) {
-    return <div className="flex min-h-screen items-center justify-center w-full">No product data found.</div>
+    return (
+      <div className="flex min-h-screen items-center justify-center w-full">
+        No product data found.
+      </div>
+    )
   }
 
   return (
@@ -113,7 +143,36 @@ export const ProductData = forwardRef(function Tabs(
             {product.description && (
               <p className="text-gray-700 my-4">{parse(product.description)}</p>
             )}
-            <ProductAddToCartButton />
+
+            {/* Variants */}
+            {hasOptions && (
+              <div className="my-4">
+                <label className="block text-gray-600 font-medium mb-2">Select Variant:</label>
+                <select
+                  value={selectedVariant?.id || ''}
+                  onChange={e =>
+                    setSelectedVariant(
+                      product.variants?.find(variant => variant.id === parseInt(e.target.value)) ||
+                        null,
+                    )
+                  }
+                  className="w-full border-gray-300 rounded-md shadow-sm"
+                >
+                  {product?.variants?.map(variant => (
+                    <option key={variant.id} value={variant.id}>
+                      {variant.option_values
+                        ?.map(option => `${option.option_display_name}: ${option.label}`)
+                        .join(', ')}
+                    </option>
+                  ))}
+                  {product?.variants?.length === 0 && (
+                    <option value="">No variants available</option>
+                  )}
+                </select>
+              </div>
+            )}
+
+            <ProductAddToCartButton variantId={selectedVariant?.id || ''} />
           </div>
         </div>
       </div>

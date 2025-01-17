@@ -56,6 +56,8 @@ export const DEFAULT_PRODUCT: ProductFragment = {
       },
     ],
   },
+  id: 0,
+  price: 0,
 }
 
 export const DEFAULT_CART: CartResponse = {

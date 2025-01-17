@@ -11,6 +11,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 
 import { CartResponse, RestResponse, LineItemRequest } from './bigcommerce/types'
 import { useIsOnline } from './useIsOnline'
+import toast from 'react-hot-toast'
 
 export const CartContext = createContext<{
   loading: boolean
@@ -67,7 +68,7 @@ export function applyOfflineOperationsToCart(
   cart: CartResponse | null,
   offlineOperations: CartOperation[],
 ) {
-  if (typeof window === 'undefined') return DEFAULT_CART
+  if (typeof window === 'undefined') return null
 
   return offlineOperations.reduce((cart, operation) => {
     const nextCart = structuredClone(cart)
@@ -83,10 +84,10 @@ export function applyOfflineOperationsToCart(
             operation.lineItem,
           ]
           nextCart.base_amount =
-            cart.base_amount + operation.lineItem.original_price * operation.lineItem.quantity
+            cart.base_amount + operation.lineItem.list_price * operation.lineItem.quantity
         } else {
           nextCart.base_amount =
-            cart.base_amount + operation.lineItem.quantity * operation.lineItem.original_price
+            cart.base_amount + operation.lineItem.quantity * operation.lineItem.list_price
 
           nextCart.line_items.physical_items[index].quantity =
             cart.line_items.physical_items[index].quantity + operation.lineItem.quantity
@@ -100,7 +101,7 @@ export function applyOfflineOperationsToCart(
           const quantityDiff =
             operation.lineItem.quantity - cart.line_items.physical_items[index].quantity
 
-          nextCart.base_amount = cart.base_amount + quantityDiff * operation.lineItem.original_price
+          nextCart.base_amount = cart.base_amount + quantityDiff * operation.lineItem.list_price
           nextCart.line_items.physical_items[index].quantity = operation.lineItem.quantity
         }
         break
@@ -113,7 +114,7 @@ export function applyOfflineOperationsToCart(
           const lineItem = lineItems[index]
           lineItems.splice(index, 1)
           nextCart.line_items.physical_items = lineItems
-          nextCart.base_amount = cart.base_amount - lineItem.quantity * lineItem.original_price
+          nextCart.base_amount = cart.base_amount - lineItem.quantity * lineItem.list_price
         }
         break
     }
@@ -130,6 +131,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const savedCart = localStorage.getItem(LOCAL_STORAGE_CART)
+
     const savedOfflineOperations = localStorage.getItem(LOCAL_STORAGE_OFFLINE_OPERATIONS)
 
     if (!window.navigator.onLine) {
@@ -139,6 +141,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (savedOfflineOperations) {
         syncOfflineOperations(parseOfflineOperations(savedOfflineOperations), parseCart(savedCart))
       } else if (savedCart) {
+        console.log('savedCart ===== ', parseCart(savedCart))
         setCart(parseCart(savedCart))
       }
     }
@@ -149,7 +152,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     ) {
       try {
         setLoading(true)
-        let currentCart: CartResponse =
+        let currentCart: CartResponse | null =
           (cart && (await attemptGetCart(cart.id))) ?? (await createCart())
         setCart(currentCart)
         setOfflineOperations(offlineOperations)
@@ -161,18 +164,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
               currentCart = await addLineItem(currentCart, currentOperation.lineItem)
               break
             case 'UPDATE':
-              currentCart = await updateLineItem(
-                currentCart,
-                currentOperation.productId,
-                currentOperation.lineItem,
-              )
+              if (currentCart)
+                currentCart = await updateLineItem(
+                  currentCart,
+                  currentOperation.productId,
+                  currentOperation.lineItem,
+                )
               break
             case 'DELETE':
-              currentCart = await deleteLineItem(currentCart, currentOperation.productId)
+              currentCart =
+                currentCart && (await deleteLineItem(currentCart, currentOperation.productId))
               break
           }
           setOfflineOperations(offlineOperations)
           localStorage.setItem(LOCAL_STORAGE_OFFLINE_OPERATIONS, JSON.stringify(offlineOperations))
+          console.log('currentCart after update 111111= ', currentCart)
           setCart(currentCart)
           localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(currentCart))
         }
@@ -188,7 +194,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       loading,
       cart: applyOfflineOperationsToCart(cart, offlineOperations),
       addItem: async (lineItem: LineItemRequest) => {
-        console.log('cart=================', cart)
+        // console.log('cart=================', cart)
         console.log('lineItem=================', lineItem)
         console.log('isOnline=================', isOnline)
 
@@ -202,11 +208,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
             return nextOfflineOperations
           })
         } else {
-          const nextCart = await addLineItem(cart, lineItem)
-          console.log('nextCart-------------', nextCart)
+          console.log('ONLINE')
+          console.log('cart === ', cart)
 
-          setCart(nextCart)
-          localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          const nextCart = await addLineItem(cart, lineItem)
+          if (nextCart) {
+            setCart(nextCart)
+            toast.success('Added to cart!')
+            localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          } else {
+            toast.error('Try again!')
+          }
         }
       },
       updateItem: async function (productId: number, lineItem: LineItemRequest) {
@@ -224,8 +236,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
           })
         } else if (cart) {
           const nextCart = await updateLineItem(cart, productId, lineItem)
-          setCart(nextCart)
-          localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          if (nextCart) {
+            setCart(nextCart)
+            toast.success('Cart Updated!')
+            localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          } else {
+            toast.error('Try again!')
+          }
         }
       },
       deleteItem: async (productId: number) => {
@@ -240,8 +257,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
           })
         } else if (cart) {
           const nextCart = await deleteLineItem(cart, productId)
-          setCart(nextCart)
-          localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          if (nextCart) {
+            setCart(nextCart)
+            toast.success('Cart Updated!')
+            localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(nextCart))
+          } else {
+            toast.error('Try again!')
+          }
         }
       },
       getCheckoutURL: async () => {

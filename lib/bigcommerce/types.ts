@@ -28,6 +28,8 @@ export type CategoriesQuery = {
 
 export type ProductFragment = {
   entityId: number
+  id: number
+  price: number
   name: string
   description: string
   defaultImage: ResponseImage
@@ -79,8 +81,9 @@ export type LineItemRequest = {
   product_id: number
   quantity: number
   name: string
-  image_url: string
-  original_price: number
+  image_url?: string
+  list_price: number
+  variant_id: number
 }
 
 export type LineItemResponse = {
@@ -98,7 +101,6 @@ export type LineItemResponse = {
   coupons: []
   discount_amount: number
   coupon_amount: number
-  original_price: number
   list_price: number
   sale_price: number
   extended_list_price: number

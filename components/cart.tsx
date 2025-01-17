@@ -42,7 +42,7 @@ function CartLineItem({ lineItem }: CartLineItemProps) {
       />
       <div className="flex flex-col flex-grow items-start justify-between">
         <div className="text-base text-black">{product?.name ?? lineItem.name}</div>
-        <div className="text-sm text-green mb-2">{formatPrice(lineItem.original_price)}</div>
+        <div className="text-sm text-green mb-2">{formatPrice(lineItem.list_price)}</div>
         <div className="flex justify-center items-center space-x-2">
           <button
             disabled={cartState === 'loading'}
@@ -110,6 +110,8 @@ export function Cart({ className, disabled }: CartProps) {
   const [cartState, setCartState] = useState<CartState>('initial')
   const isOnline = useIsOnline()
   const { t } = usePreviewableTranslation('cart')
+  console.log('000000000000000000000 = ', cart)
+
   const itemCount =
     cart?.line_items.physical_items.reduce((acc, curr) => curr.quantity + acc, 0) ?? 0
 
@@ -234,9 +236,10 @@ type AddToCartState = 'initial' | 'loading' | 'confirming'
 
 type ProductAddToCartButtonProps = {
   className?: string
+  variantId?: any
 }
 
-export function ProductAddToCartButton({ className }: ProductAddToCartButtonProps) {
+export function ProductAddToCartButton({ className, variantId }: ProductAddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1)
   const [addToCartState, setAddToCartState] = useState<AddToCartState>('initial')
   const { addItem, loading: cartLoading } = useCart()
@@ -261,18 +264,22 @@ export function ProductAddToCartButton({ className }: ProductAddToCartButtonProp
         disabled={cartLoading && addToCartState !== 'initial'}
         onClick={async () => {
           setAddToCartState('loading')
+          console.log('START ==== ', product)
+          console.log('variantId ==== ', variantId)
+          console.log('quantity ==== ', quantity)
+
           await addItem({
-            product_id: product.entityId,
+            product_id: product.id,
             quantity,
-            original_price: product.prices.price.value,
-            image_url: product.images.edges?.[0].node.urlOriginal,
+            list_price: product.price,
             name: product.name,
+            variant_id: variantId,
           })
-          console.log("Yeeeeeeeeeessssssssssssssss");
-          
+          // console.log('Yeeeeeeeeeessssssssssssssss')
+
           setQuantity(1)
           // setAddToCartState('confirming')
-          // setTimeout(() => setAddToCartState('initial'), 2000)
+          setTimeout(() => setAddToCartState('initial'), 2000)
         }}
         className={`min-w-[170px] h-16 text-xl text-black font-bold bg-[#DBF067] hover:bg-[#DBF067]/80 px-8 relative z-0 rounded`}
       >

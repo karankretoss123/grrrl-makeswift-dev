@@ -21,6 +21,7 @@ import { ProductContext } from 'lib/product-context'
 import { DEFAULT_LOCALE } from 'lib/locale'
 
 import getGlobalProps from 'lib/global-props'
+import { Toaster } from 'react-hot-toast'
 
 type Props = MakeswiftPageProps & ProductPageProps
 
@@ -65,7 +66,7 @@ export async function getStaticProps(
     getGlobalProps(),
   ])
 
-  // if (product == null) return { notFound: true, revalidate: 1 }
+  if (product == null) return { notFound: true, revalidate: 1 }
 
   return {
     props: {
@@ -77,7 +78,7 @@ export async function getStaticProps(
       ...globalProps,
       snapshot,
       products,
-      // product,
+      product,
     },
     revalidate: 1,
   }
@@ -86,7 +87,8 @@ export async function getStaticProps(
 export default function Page({ products, product, snapshot }: Props) {
   return (
     <ProductsContext.Provider value={products}>
-      <ProductContext.Provider value={DEFAULT_PRODUCT}>
+      <Toaster position="bottom-center" />
+      <ProductContext.Provider value={product}>
         <MakeswiftPage snapshot={snapshot} />
       </ProductContext.Provider>
     </ProductsContext.Provider>

@@ -26,7 +26,7 @@ type Props = {
 export function Header({ className, links, localeSwitcherDisabled, cartDisabled }: Props) {
   const isOnline = useIsOnline()
 
-  const topCategories = useTopCategories()
+  // const topCategories = useTopCategories()
 
   return (
     <div className={`${className} h-12 grid  grid-cols-3 `}>

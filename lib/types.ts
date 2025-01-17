@@ -7,7 +7,7 @@ export type PageProps = {
 
 export type ProductPageProps = {
   products: ProductFragment[]
-  product?: ProductFragment
+  product: ProductFragment
 }
 
 export type CategoryPageProps = {

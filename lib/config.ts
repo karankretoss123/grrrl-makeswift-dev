@@ -31,6 +31,7 @@ export function getConfig(): Config {
       accessToken: 'ke0dwftal3vhqe3cr8z3u7mvobe3w2k',
       storeURL: `https://api.bigcommerce.com/stores/${storeHash}`,
       apiUrl: `https://grrrlproxyserver.kretosstechnology.com/`,
+      // apiUrl: `http://localhost:3023/`,
       storefrontURL: `https://store-${storeHash}-${channelId}.mybigcommerce.com/graphql`,
       storefrontToken:
         'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjaWQiOlsxXSwiY29ycyI6W10sImVhdCI6MTg4NTYzNTE3NiwiaWF0IjoxNzM2NDE1NjU0LCJpc3MiOiJCQyIsInNpZCI6MTAwMzI3MzA2NSwic3ViIjoiajZkZjRkeThtMXR5czI0dDV0anljdXdmMjQ3dTg2aiIsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoyfQ.KL3BixCEcT1AfJaKIT4AlGQRaG4BjPhiEWIILknwoXJdVM10xXjPXjsBR9TaHMcMyO4nDSei6ve0ZiYxx6MZtQ',
