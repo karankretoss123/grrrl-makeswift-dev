@@ -237,9 +237,14 @@ type AddToCartState = 'initial' | 'loading' | 'confirming'
 type ProductAddToCartButtonProps = {
   className?: string
   variantId?: any
+  stock?: any
 }
 
-export function ProductAddToCartButton({ className, variantId }: ProductAddToCartButtonProps) {
+export function ProductAddToCartButton({
+  className,
+  variantId,
+  stock,
+}: ProductAddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1)
   const [addToCartState, setAddToCartState] = useState<AddToCartState>('initial')
   const { addItem, loading: cartLoading } = useCart()
@@ -250,18 +255,25 @@ export function ProductAddToCartButton({ className, variantId }: ProductAddToCar
     <div className={`${className} space-x-5 flex text-white`}>
       <div className="flex justify-center items-center space-x-3">
         <button
+          disabled={(cartLoading && addToCartState !== 'initial') || stock === 0}
           aria-label="Decrease quantity"
           onClick={() => setQuantity(prev => (prev === 1 ? prev : prev - 1))}
+          className="disabled:cursor-not-allowed"
         >
           <Minus36 />
         </button>
         <div className="text-lg w-4 text-center">{quantity}</div>
-        <button aria-label="Increase quantity" onClick={() => setQuantity(prev => prev + 1)}>
+        <button
+          disabled={(cartLoading && addToCartState !== 'initial') || stock === 0}
+          aria-label="Increase quantity"
+          onClick={() => setQuantity(prev => prev + 1)}
+          className="disabled:cursor-not-allowed"
+        >
           <Plus36 />
         </button>
       </div>
       <button
-        disabled={cartLoading && addToCartState !== 'initial'}
+        disabled={(cartLoading && addToCartState !== 'initial') || stock === 0}
         onClick={async () => {
           setAddToCartState('loading')
           console.log('START ==== ', product)
@@ -281,7 +293,7 @@ export function ProductAddToCartButton({ className, variantId }: ProductAddToCar
           // setAddToCartState('confirming')
           setTimeout(() => setAddToCartState('initial'), 2000)
         }}
-        className={`min-w-[170px] h-16 text-xl text-black font-bold bg-[#DBF067] hover:bg-[#DBF067]/80 px-8 relative z-0 rounded`}
+        className={`disabled:cursor-not-allowed min-w-[170px] h-16 text-xl text-black font-bold bg-[#DBF067] hover:bg-[#DBF067]/80 disabled:bg-[#DBF067]/80 px-8 relative z-0 rounded`}
       >
         <Transition
           className={'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'}

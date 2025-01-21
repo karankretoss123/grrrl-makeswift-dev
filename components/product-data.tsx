@@ -16,6 +16,7 @@ type ProductDetails = {
 }
 
 type Variant = {
+  inventory_level: number
   id: number
   sku: string
   price: number
@@ -169,10 +170,17 @@ export const ProductData = forwardRef(function Tabs(
                     <option value="">No variants available</option>
                   )}
                 </select>
+                {/* Out of Stock Message */}
+                {selectedVariant && selectedVariant.inventory_level === 0 && (
+                  <p className="mt-2 text-red-500">Out of stock</p>
+                )}
               </div>
             )}
 
-            <ProductAddToCartButton variantId={selectedVariant?.id || ''} />
+            <ProductAddToCartButton
+              variantId={selectedVariant?.id || ''}
+              stock={selectedVariant?.inventory_level}
+            />
           </div>
         </div>
       </div>
