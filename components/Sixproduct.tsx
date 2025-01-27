@@ -4,6 +4,7 @@ import axios from 'axios'
 import clsx from 'clsx'
 import { getConfig } from 'lib/config'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 type ProductItem = {
   id: ReactNode
@@ -21,6 +22,7 @@ export const Sixproduct = forwardRef(function Tabs(
   { className, categoryId }: Props,
   ref: Ref<HTMLDivElement>,
 ) {
+  const router = useRouter()
   const config = getConfig()
   const apiUrl: string = config.bigcommerce.apiUrl || ''
   const [products, setProducts] = useState<ProductItem[]>([])
@@ -52,6 +54,10 @@ export const Sixproduct = forwardRef(function Tabs(
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleViewAllClick = () => {
+    router.push('/category/51')
   }
 
   useEffect(() => {
@@ -96,7 +102,10 @@ export const Sixproduct = forwardRef(function Tabs(
         )}
       </div>
 
-      <button className="mx-auto mt-20 w-max rounded-full bg-[#FF02D6] px-24 py-4 text-white shadow-md hover:bg-[#FF02D6]/80">
+      <button
+        className="mx-auto mt-20 w-max rounded-full bg-[#FF02D6] px-24 py-4 text-white shadow-md hover:bg-[#FF02D6]/80"
+        onClick={() => handleViewAllClick()}
+      >
         VIEW ALL
       </button>
     </div>

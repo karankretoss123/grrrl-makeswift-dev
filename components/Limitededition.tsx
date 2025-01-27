@@ -4,6 +4,7 @@ import axios from 'axios'
 import clsx from 'clsx'
 import { getConfig } from 'lib/config'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 type ProductItem = {
   id: ReactNode
@@ -21,10 +22,15 @@ export const Limitededition = forwardRef(function Tabs(
   { className, categoryId = '23' }: Props,
   ref: Ref<HTMLDivElement>,
 ) {
+  const router = useRouter()
   const config = getConfig()
   const apiUrl: string = config.bigcommerce.apiUrl || ''
   const [products, setProducts] = useState<ProductItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const handleViewAllClick = () => {
+    router.push('/category/38')
+  }
 
   const fetchProductsByCategory = async (categoryId: string) => {
     setIsLoading(true)
@@ -110,7 +116,10 @@ export const Limitededition = forwardRef(function Tabs(
                 className="object-fit h-full w-full rounded-[25px]"
               />
             </div>
-            <button className="w-max rounded-full bg-[#DBF067] px-12 py-3 text-lg font-bold shadow-md hover:bg-[#DBF067]/80">
+            <button
+              className="w-max rounded-full bg-[#DBF067] px-12 py-3 text-lg font-bold shadow-md hover:bg-[#DBF067]/80"
+              onClick={() => handleViewAllClick()}
+            >
               VIEW ALL
             </button>
             <img src="/images/smile.jpg" alt="Limited Edition" className="mt-4 h-20" />
